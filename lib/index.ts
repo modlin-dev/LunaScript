@@ -1,4 +1,17 @@
 export const LS = {
+  TypeCheck: ($: Record<any, any>, to: Record<any, any>) => {
+    for (let type of getTypes(to)) {
+      if (type.type === "object") {
+        LS.Object(atPath($, type.key) ?? {});
+      }
+      if (type.type === "string") {
+        LS.String(atPath($, type.key) ?? "");
+      }
+      if (type.type === "number") {
+        LS.Number(atPath($, type.key) ?? 1);
+      }
+    }
+  },
   isBigInt: ($: any) => (typeof $ === "bigint" ? true : false),
   isBoolean: ($: any) => (typeof $ === "boolean" ? true : false),
   isFunction: ($: any) => (typeof $ === "function" ? true : false),
@@ -26,12 +39,13 @@ export const LS = {
       );
     }
   },
-  Function: <T extends (...args: any[]) => any>($: T) => {
+  Function: <T extends (...args: any[]) => any>(
+    $: T,
+    types: Record<any, any>
+  ) => {
     if (typeof $ === "function") {
       return (...args: Parameters<T>): ReturnType<T> => {
-        args.forEach((value) => {
-          if (value !== typeof)
-        })
+        LS.TypeCheck(args, types);
         return $(...args);
       };
     } else {
@@ -95,3 +109,32 @@ export const LS = {
   toSymbol: ($: string | number | undefined) => Symbol($),
   toUndefined: ($: undefined) => undefined,
 };
+
+function* getTypes(
+  $: Record<any, any>,
+  parentKey = ""
+): Generator<{ key: string; type: string }> {
+  for (let key in $) {
+    if ($.hasOwnProperty(key)) {
+      let newKey = parentKey ? `${parentKey}.${key}` : key;
+      if (typeof $[key] === "object" && $[key] !== null) {
+        yield* getTypes($[key], newKey);
+      } else {
+        yield { key: newKey, type: typeof $[key] };
+      }
+    }
+  }
+}
+
+function atPath(obj: any, path: string) {
+  let parts = path.split(".");
+  let current = obj;
+  for (let part of parts) {
+    if (current[part] === undefined) {
+      return undefined;
+    } else {
+      current = current[part];
+    }
+  }
+  return current;
+}
