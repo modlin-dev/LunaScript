@@ -1,15 +1,14 @@
 export const LS = {
   TypeCheck: ($: Record<any, any>, to: Record<any, any>) => {
     for (let type of getTypes(to)) {
-      if (type.type === "object") {
-        LS.Object(atPath($, type.key) ?? {});
-      }
-      if (type.type === "string") {
-        LS.String(atPath($, type.key) ?? "");
-      }
-      if (type.type === "number") {
-        LS.Number(atPath($, type.key) ?? 1);
-      }
+      if (type.type === "bigint") LS.BigInt(atPath($, type.key));
+      if (type.type === "boolean") LS.Boolean(atPath($, type.key));
+      if (type.type === "function") LS.Function(atPath($, type.key));
+      if (type.type === "number") LS.Number(atPath($, type.key));
+      if (type.type === "object") LS.Object(atPath($, type.key));
+      if (type.type === "string") LS.String(atPath($, type.key));
+      if (type.type === "symbol") LS.Symbol(atPath($, type.key));
+      if (type.type === "undefined") LS.Undefined(atPath($, type.key));
     }
   },
   isBigInt: ($: any) => (typeof $ === "bigint" ? true : false),
@@ -39,13 +38,16 @@ export const LS = {
       );
     }
   },
-  Function: <T extends (...args: any[]) => any>(
-    $: T,
-    types: Record<any, any>
-  ) => {
+  Function: <T extends (...args: any[]) => any>($: T, types?: any[]) => {
     if (typeof $ === "function") {
       return (...args: Parameters<T>): ReturnType<T> => {
-        LS.TypeCheck(args, types);
+        if (types) {
+          let at = 0;
+          for (const arg of args) {
+            LS.TypeCheck(arg, types[at]);
+            at += 1;
+          }
+        }
         return $(...args);
       };
     } else {
@@ -138,3 +140,29 @@ function atPath(obj: any, path: string) {
   }
   return current;
 }
+
+const UserTypes = LS.Object({
+  name: String(),
+  password: Number(),
+  email: String(),
+  verified: Boolean(),
+});
+
+const addUser = LS.Function(
+  (data: typeof UserTypes) => {
+    console.log(data);
+    return data;
+  },
+  [UserTypes]
+);
+
+addUser({
+  name: "John",
+  password: 21389,
+  email: "john@example.com",
+});
+
+await Bun.build({
+  entrypoints: ["lib/index.ts"],
+  outdir: "dist",
+});
