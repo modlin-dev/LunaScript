@@ -20,7 +20,8 @@
     "bun-types": "^1.0.25"
   },
   "scripts": {
-    "test": "bun lib/index.test.js"
+    "test:i": "bun lib/index.test.js",
+    "test:v": "bun lib/variables.test.js"
   },
   "repository": {
     "type": "git",

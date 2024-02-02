@@ -1,3 +1,9 @@
+import LBoolean from "./extension/boolean";
+import LNumber from "./extension/number";
+import LString from "./extension/string";
+
+const Str = new LString("Hello, world!");
+
 export const LS = {
   TypeCheck: ($: Record<any, any>, to: Record<any, any>) => {
     for (let type of getTypes(to)) {
@@ -31,7 +37,7 @@ export const LS = {
   },
   Boolean: <T extends boolean>($: T) => {
     if (typeof $ === "boolean") {
-      return $;
+      return new LBoolean($);
     } else {
       throw new TypeError(
         `LunaScript: Expected boolean, got ${typeof $} value ${$}`
@@ -58,7 +64,7 @@ export const LS = {
   },
   Number: <T extends number>($: T) => {
     if (typeof $ === "number") {
-      return $;
+      return new LNumber($);
     } else {
       throw new TypeError(
         `LunaScript: Expected number, got ${typeof $} value ${$}`
@@ -76,16 +82,16 @@ export const LS = {
   },
   String: <T extends string>($: T) => {
     if (typeof $ === "string") {
-      return $;
+      return new LString($);
     } else {
       throw new TypeError(
         `LunaScript: Expected string, got ${typeof $} value ${$}`
       );
     }
   },
-  Symbol: <T extends symbol>($: T) => {
-    if (typeof $ === "symbol") {
-      return $;
+  Symbol: <T extends string | number>($: T) => {
+    if (typeof $ === "string" || typeof $ === "number") {
+      return Symbol($);
     } else {
       throw new TypeError(
         `LunaScript: Expected symbol, got ${typeof $} value ${$}`
@@ -127,7 +133,6 @@ function* getTypes(
     }
   }
 }
-
 function atPath(obj: any, path: string) {
   let parts = path.split(".");
   let current = obj;
@@ -140,29 +145,3 @@ function atPath(obj: any, path: string) {
   }
   return current;
 }
-
-const UserTypes = LS.Object({
-  name: String(),
-  password: Number(),
-  email: String(),
-  verified: Boolean(),
-});
-
-const addUser = LS.Function(
-  (data: typeof UserTypes) => {
-    console.log(data);
-    return data;
-  },
-  [UserTypes]
-);
-
-addUser({
-  name: "John",
-  password: 21389,
-  email: "john@example.com",
-});
-
-await Bun.build({
-  entrypoints: ["lib/index.ts"],
-  outdir: "dist",
-});
