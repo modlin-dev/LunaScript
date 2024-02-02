@@ -3,7 +3,8 @@
   "module": "lib/index.ts",
   "type": "module",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/react": "^18.2.51"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -15,9 +16,11 @@
     "lib": "lib"
   },
   "dependencies": {
-    "undici-types": "^5.28.2",
-    "typescript": "^5.3.3",
-    "bun-types": "^1.0.25"
+    "@modlin.dev/terminal": "^1.0.0",
+    "bun-types": "^1.0.25",
+    "react": "^18.2.0",
+    "typescript": "^5.0.0",
+    "undici-types": "^5.28.2"
   },
   "scripts": {
     "test:i": "bun lib/index.test.js",
