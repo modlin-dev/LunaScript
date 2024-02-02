@@ -1,4 +1,4 @@
-class $str8 extends String {
+class utf8 extends String {
   /** Returns a bigint representation of a string. */
   toBigInt(): bigint {
     return BigInt(this as any);
@@ -35,4 +35,4 @@ class $str8 extends String {
   }
 }
 
-export default $str8;
+export default utf8;

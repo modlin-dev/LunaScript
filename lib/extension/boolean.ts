@@ -1,4 +1,4 @@
-class $bool extends Boolean {
+class bool extends Boolean {
   /** Returns a bigint representation of a boolean. */
   toBigInt(): bigint {
     return BigInt(this as any);
@@ -41,4 +41,4 @@ class $bool extends Boolean {
   }
 }
 
-export default $bool;
+export default bool;

@@ -17,17 +17,17 @@ export const LS = {
       if (type.type === "undefined") LS.Undefined(atPath($, type.key));
     }
   },
-  isBigInt: ($: any) => (typeof $ === "bigint" ? true : false),
-  isBoolean: ($: any) => (typeof $ === "boolean" ? true : false),
-  isFunction: ($: any) => (typeof $ === "function" ? true : false),
-  isNumber: ($: any) => (typeof $ === "number" ? true : false),
-  isObject: ($: any) => (typeof $ === "object" ? true : false),
-  isString: ($: any) => (typeof $ === "string" ? true : false),
-  isSymbol: ($: any) => (typeof $ === "symbol" ? true : false),
-  isUndefined: ($: any) => (typeof $ === "undefined" ? true : false),
+  isBigInt: ($: any): $ is bigint => typeof $ === "bigint",
+  isBoolean: ($: any): $ is boolean => typeof $ === "boolean",
+  isFunction: ($: any): $ is Function => typeof $ === "function",
+  isNumber: ($: any): $ is number => typeof $ === "number",
+  isObject: ($: any): $ is object => typeof $ === "object",
+  isString: ($: any): $ is string => typeof $ === "string",
+  isSymbol: ($: any): $ is symbol => typeof $ === "symbol",
+  isUndefined: ($: any): $ is undefined => typeof $ === "undefined",
 
   BigInt: <T extends bigint>($: T) => {
-    if (typeof $ === "bigint") {
+    if (LS.isBigInt($)) {
       return $;
     } else {
       throw new TypeError(
@@ -36,7 +36,7 @@ export const LS = {
     }
   },
   Boolean: <T extends boolean>($: T) => {
-    if (typeof $ === "boolean") {
+    if (LS.Boolean($)) {
       return new LBoolean($);
     } else {
       throw new TypeError(
@@ -45,7 +45,7 @@ export const LS = {
     }
   },
   Function: <T extends (...args: any[]) => any>($: T, types?: any[]) => {
-    if (typeof $ === "function") {
+    if (LS.isFunction($)) {
       return (...args: Parameters<T>): ReturnType<T> => {
         if (types) {
           let at = 0;
@@ -63,7 +63,7 @@ export const LS = {
     }
   },
   Number: <T extends number>($: T) => {
-    if (typeof $ === "number") {
+    if (LS.Number($)) {
       return new LNumber($);
     } else {
       throw new TypeError(
@@ -72,7 +72,7 @@ export const LS = {
     }
   },
   Object: <T extends Record<any, any>>($: T) => {
-    if (typeof $ === "object") {
+    if (LS.isObject($)) {
       return $;
     } else {
       throw new TypeError(
@@ -81,7 +81,7 @@ export const LS = {
     }
   },
   String: <T extends string>($: T) => {
-    if (typeof $ === "string") {
+    if (LS.isString($)) {
       return new LString($);
     } else {
       throw new TypeError(
@@ -90,7 +90,7 @@ export const LS = {
     }
   },
   Symbol: <T extends string | number>($: T) => {
-    if (typeof $ === "string" || typeof $ === "number") {
+    if (LS.isString($) || LS.isNumber($)) {
       return Symbol($);
     } else {
       throw new TypeError(
@@ -99,7 +99,7 @@ export const LS = {
     }
   },
   Undefined: <T extends undefined>($: T) => {
-    if (typeof $ === "symbol") {
+    if (LS.isUndefined($)) {
       return $;
     } else {
       throw new TypeError(
