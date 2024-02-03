@@ -1,4 +1,4 @@
-class int16 extends Number {
+export class int16 extends Number {
   /** Returns a bigint representation of a number. */
   toBigInt(): bigint {
     return BigInt(this as any);
@@ -35,5 +35,3 @@ class int16 extends Number {
     return undefined;
   }
 }
-
-export default int16;
