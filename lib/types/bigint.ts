@@ -1,4 +1,4 @@
-class bool extends Boolean {
+export class int64 {
   /** Returns a bigint representation of a boolean. */
   toBigInt(): bigint {
     return BigInt(this as any);
@@ -41,4 +41,16 @@ class bool extends Boolean {
   }
 }
 
-export default bool;
+BigInt.prototype.toNumber = function (): number {
+  const num = Number(this);
+  if (!Number.isSafeInteger(num)) {
+    throw new RangeError("The value is too large and not a safe integer.");
+  }
+  return num;
+};
+
+function createBigInt(value: bigint | string): BigInt {
+  return BigInt(value);
+}
+
+createBigInt(0n).

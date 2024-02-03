@@ -1,8 +1,14 @@
-import LBoolean from "./extension/boolean";
-import LNumber from "./extension/number";
-import LString from "./extension/string";
+import { bool } from "./types/boolean";
+import { int16 } from "./types/number";
+import { utf8 } from "./types/string";
 
-const Str = new LString("Hello, world!");
+type Value<T> = {
+  [P in keyof T]: T[P];
+};
+
+type Opt<T> = {
+  [P in keyof T]?: T;
+};
 
 export const LS = {
   TypeCheck: ($: Record<any, any>, to: Record<any, any>) => {
@@ -36,8 +42,8 @@ export const LS = {
     }
   },
   Boolean: <T extends boolean>($: T) => {
-    if (LS.Boolean($)) {
-      return new LBoolean($);
+    if (LS.isBoolean($)) {
+      return new bool($);
     } else {
       throw new TypeError(
         `LunaScript: Expected boolean, got ${typeof $} value ${$}`
@@ -63,26 +69,24 @@ export const LS = {
     }
   },
   Number: <T extends number>($: T) => {
-    if (LS.Number($)) {
-      return new LNumber($);
+    if (LS.isNumber($)) {
+      return new int16($);
     } else {
       throw new TypeError(
         `LunaScript: Expected number, got ${typeof $} value ${$}`
       );
     }
   },
-  Object: <T extends Record<any, any>>($: T) => {
-    if (LS.isObject($)) {
-      return $;
-    } else {
-      throw new TypeError(
-        `LunaScript: Expected object, got ${typeof $} value ${$}`
-      );
-    }
+  /**
+   * @param types Types are Experimental use JSDoc or TypeScript instead
+   * @returns
+   */
+  Object: <T extends object>($: Value<T>, types?: T): T => {
+    return $;
   },
   String: <T extends string>($: T) => {
     if (LS.isString($)) {
-      return new LString($);
+      return new utf8($);
     } else {
       throw new TypeError(
         `LunaScript: Expected string, got ${typeof $} value ${$}`
@@ -108,7 +112,7 @@ export const LS = {
     }
   },
 
-  toBigInt: ($: string | number | bigint | boolean) => BigInt($),
+  toBigInt: ($: string) => BigInt($),
   toBoolean: ($: any) => Boolean($),
   toFunction: (...$: string[]) => Function(...$),
   toNumber: ($: any) => Number($),
@@ -145,3 +149,15 @@ function atPath(obj: any, path: string) {
   }
   return current;
 }
+
+interface Employee {
+  id: number;
+  name: string;
+  salary: number;
+}
+
+const emp: Partial<Employee> = {};
+
+emp.name = "Bobby Hadz";
+
+emp;

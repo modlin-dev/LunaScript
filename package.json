@@ -23,8 +23,8 @@
     "undici-types": "^5.28.2"
   },
   "scripts": {
-    "test:i": "bun lib/index.test.js",
-    "test:v": "bun lib/variables.test.js"
+    "test:i": "bun lib/tests/index.test.js",
+    "test:v": "bun lib/tests/variables.test.js"
   },
   "repository": {
     "type": "git",
@@ -35,5 +35,5 @@
     "TypeScript"
   ],
   "author": "Hiroshi Modlin",
-  "license": "MIT"
+  "license": "MCL"
 }

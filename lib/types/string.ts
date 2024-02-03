@@ -1,4 +1,4 @@
-class utf8 extends String {
+export class utf8 extends String {
   /** Returns a bigint representation of a string. */
   toBigInt(): bigint {
     return BigInt(this as any);
@@ -35,4 +35,4 @@ class utf8 extends String {
   }
 }
 
-export default utf8;
+new utf8()
