@@ -1,38 +1,45 @@
 export class int64 {
-  /** Returns a bigint representation of a boolean. */
-  toBigInt(): bigint {
-    return BigInt(this as any);
+  constructor(public value: bigint) {
   }
+
+  /**
+   * Returns a string representation of an object.
+   * @param radix Specifies a radix for converting numeric values to strings.
+   */
+  toString = BigInt.prototype.toString;
+
+  /** Returns a string representation appropriate to the host environment's current locale. */
+  toLocaleString = BigInt.prototype.toLocaleString;
+
+  /** Returns the primitive value of the specified object. */
+  valueOf = BigInt.prototype.valueOf;
+
+  readonly [Symbol.toStringTag] = BigInt.prototype[Symbol.toStringTag];
 
   /** Returns a boolean representation of a boolean. */
   toBoolean(): boolean {
-    return Boolean(this);
+    return Boolean(this.value);
   }
 
   /** Returns a Function representation of a boolean. */
-  toFunction(): Function {
-    return Function(...(this as any));
+  toFunction(): () => bigint {
+    return () => this.value;
   }
 
   /**
    * Returns a number representation of a boolean. */
   toNumber(): number {
-    return Number(this);
+    return Number(this.value);
   }
 
   /** Returns a object representation of a boolean. */
   toObject(): object {
-    return Object(this);
-  }
-
-  /** Returns a string representation of a boolean. */
-  toString(): string {
-    return String(this);
+    return Object(this.value);
   }
 
   /** Returns a symbol representation of a boolean. */
   toSymbol(): symbol {
-    return Symbol(this as any);
+    return Symbol(Number(this.value));
   }
 
   /** Returns a undefined representation of a boolean. */
@@ -41,16 +48,4 @@ export class int64 {
   }
 }
 
-BigInt.prototype.toNumber = function (): number {
-  const num = Number(this);
-  if (!Number.isSafeInteger(num)) {
-    throw new RangeError("The value is too large and not a safe integer.");
-  }
-  return num;
-};
-
-function createBigInt(value: bigint | string): BigInt {
-  return BigInt(value);
-}
-
-createBigInt(0n).
+console.log(new int64(0n).value.);
