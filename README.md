@@ -1,6 +1,6 @@
 # LunaScript
 
-### JavaScript Libary for Types and TypeError for Bun
+### JavaScript Libary for Types and TypeError for Bun.
 
 by [Hiroshi Modlin](https://github.com/modlin-dev)
 
@@ -22,7 +22,7 @@ const bool = LS.Boolean(true);
 
 const int16 = LS.Number(0);
 
-const 
+const
 
 const utf8 = LS.String("Hello, world");
 

@@ -1,6 +1,7 @@
 import { bool } from "./types/boolean";
 import { int16 } from "./types/number";
 import { utf8 } from "./types/string";
+import { int64 } from "./types/bigint";
 
 type Value<T> = {
   [P in keyof T]: T[P];
@@ -34,7 +35,7 @@ export const LS = {
 
   BigInt: <T extends bigint>($: T) => {
     if (LS.isBigInt($)) {
-      return $;
+      return new int64($);
     } else {
       throw new TypeError(
         `LunaScript: Expected bigint, got ${typeof $} value ${$}`
