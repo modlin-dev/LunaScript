@@ -3,6 +3,7 @@
   "module": "lib/index.ts",
   "type": "module",
   "devDependencies": {
+    "@biomejs/biome": "1.5.3",
     "@types/bun": "latest",
     "@types/react": "^18.2.51"
   },
@@ -17,6 +18,7 @@
   },
   "dependencies": {
     "@modlin.dev/terminal": "^1.0.0",
+    "@sinclair/typebox": "^0.32.14",
     "bun-types": "^1.0.25",
     "react": "^18.2.0",
     "typescript": "^5.0.0",
@@ -24,7 +26,8 @@
   },
   "scripts": {
     "test:i": "bun lib/tests/index.test.js",
-    "test:v": "bun lib/tests/variables.test.js"
+    "test:v": "bun lib/tests/variables.test.js",
+    "test:t": "bun lib/tests/types.test.js"
   },
   "repository": {
     "type": "git",
